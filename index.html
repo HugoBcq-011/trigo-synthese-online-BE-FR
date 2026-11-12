@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8da6e6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Trigo">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Trigo en cercle</title>
+<style>
+:root{--r:#E5282D;--y:#F5A800;--b:#1E3A8F;--ink:#14203F;--mut:#1f2c52;--ok:#1f9d55;color-scheme:light}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font:16px/1.45 ui-rounded,-apple-system,"SF Pro Rounded",system-ui,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#8da6e6;overflow-x:hidden;min-height:100dvh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 10% 6%,#ff5a5fdd 0,transparent 40%),radial-gradient(circle at 95% 28%,#ffc933dd 0,transparent 42%),radial-gradient(circle at 25% 100%,#2f55c8dd 0,transparent 50%),#8da6e6}
+.glass{background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.25),0 10px 30px rgba(30,58,143,.14);border-radius:26px}
+header{position:sticky;top:0;z-index:5;margin:calc(8px + env(safe-area-inset-top,0px)) 12px 0;padding:8px 14px;display:flex;align-items:center;gap:12px;border-radius:22px}
+header img{height:44px;width:auto}
+header b{font-size:1.1rem;letter-spacing:-.01em;line-height:1.1}
+header small{display:block;color:var(--mut);font-size:.78rem}
+main{max-width:560px;margin:0 auto;padding:14px 12px calc(110px + env(safe-area-inset-bottom,0px))}
+.view{display:none}.view.on{display:block}
+.view>*+*{margin-top:12px}
+h1{font-size:1.55rem;letter-spacing:-.02em;margin:6px 4px 0;line-height:1.15}
+h2{font-size:1.1rem;margin:0 0 6px}
+.sub{color:var(--mut);margin:2px 4px 0;font-size:.95rem}
+.pad{padding:14px 16px}
+.cvw{padding:8px;touch-action:none;user-select:none;-webkit-user-select:none}
+.cvw svg{width:100%;height:auto;display:block;max-height:62dvh;touch-action:none}
+.gr{stroke:rgba(30,58,143,.13);stroke-width:.6;fill:none}
+.ax{stroke:var(--ink);stroke-width:1.1;fill:none;opacity:.7}
+.cc{fill:rgba(255,255,255,.4);stroke:var(--b);stroke-width:1.6}
+.tk{font-size:7.5px;fill:var(--mut);text-anchor:middle}
+.lc{stroke:var(--b);stroke-width:4;stroke-linecap:round}.ls{stroke:var(--r);stroke-width:4;stroke-linecap:round}
+.lt{stroke:var(--y);stroke-width:4;stroke-linecap:round}.ld{stroke:var(--y);stroke-width:1;stroke-dasharray:3 3}
+.rad{stroke:var(--ink);stroke-width:1.4}.arc{fill:none;stroke:var(--ink);stroke-width:1.2}
+.pt{fill:#fff;stroke:var(--ink);stroke-width:2.5}
+.tl{font-size:10px;font-weight:700;paint-order:stroke;stroke:#fff;stroke-width:3px}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tri .glass{padding:10px 6px;text-align:center;border-radius:20px}
+.tri small{display:block;font-weight:700;font-size:.8rem}.tri b{font-size:1.3rem}
+.cb{color:var(--b)}.rb{color:var(--r)}.yb{color:#b87a00}
+input[type=range]{width:100%;height:44px;accent-color:var(--b);margin:4px 0 0}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.chips button{flex:none}
+button{font:inherit;color:inherit;cursor:pointer}
+.chip,.seg button,.opt,.btn,nav button{border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-radius:999px;min-height:44px;padding:8px 16px;box-shadow:0 4px 14px rgba(30,58,143,.1)}
+.btn{background:linear-gradient(180deg,#3f63c9,var(--b));color:#fff;font-weight:700;border-color:rgba(255,255,255,.5);width:100%}
+.btn.ok{background:linear-gradient(180deg,#34b872,var(--ok))}.btn.ko{background:linear-gradient(180deg,#f0565a,var(--r))}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.seg{display:flex;gap:8px}.seg button{flex:1;padding:8px 4px}.seg .on{background:var(--b);color:#fff}
+.sc{display:flex;justify-content:space-between;font-weight:700;padding:10px 16px}
+.card{padding:22px 16px;min-height:170px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:6px;cursor:pointer}
+.q{font-size:1.3rem;font-weight:700;margin:4px 0;letter-spacing:-.01em}
+.card small{color:var(--mut)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.opt{border-radius:18px;font-weight:700;min-height:56px}
+.opt.ok{background:var(--ok);color:#fff}.opt.ko{background:var(--r);color:#fff}
+input[type=text]{flex:2;min-width:0;font:inherit;font-size:16px;min-height:48px;border-radius:16px;border:1px solid rgba(30,58,143,.3);background:rgba(255,255,255,.7);padding:8px 14px;color:var(--ink)}
+.fb{font-weight:700;margin:8px 0}.fb.ok{color:var(--ok)}.fb.ko{color:var(--r)}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;color:#fff;background:var(--b)}
+.step:nth-child(2) i{background:var(--r)}.step:nth-child(3) i{background:var(--y);color:var(--ink)}.step:nth-child(4) i{background:var(--ink)}
+.step p{margin:0}
+table{width:100%;border-collapse:collapse;text-align:center;font-size:.95rem}
+th,td{padding:8px 4px;border-bottom:1px solid rgba(30,58,143,.12)}th{color:var(--mut);font-weight:700}
+tr:last-child td{border-bottom:0}
+.ex{background:rgba(255,255,255,.55);border-radius:16px;padding:10px 14px;margin:8px 0;font-weight:600}
+.fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 3px}
+.fr i{font-style:normal;padding:0 5px}.fr i:first-child{border-bottom:1.6px solid currentColor}
+.fm{font-size:1.08rem;line-height:2.1;overflow-x:auto}
+nav{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:536px;margin:0 auto;display:flex;gap:4px;padding:6px;border-radius:30px;z-index:9}
+nav button{flex:1;border:0;background:transparent;box-shadow:none;padding:6px 2px;font-size:.74rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:0;border-radius:24px;color:var(--mut)}
+nav button span{font-size:1.25rem;line-height:1.3}
+nav button[aria-current]{background:rgba(255,255,255,.75);color:var(--b);box-shadow:0 2px 10px rgba(30,58,143,.18)}
+footer{text-align:center;color:var(--mut);font-size:.78rem;margin:18px 8px 0}
+#mt{margin-left:auto;flex:none;width:44px;padding:0;font-size:1.2rem}
+#sp{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:calc(20px + env(safe-area-inset-top,0px)) 24px calc(20px + env(safe-area-inset-bottom,0px));background:linear-gradient(160deg,#1E3A8F,#14203F 75%);color:#fff;text-align:center;transition:opacity .6s,visibility .6s}
+#sp.out{opacity:0;visibility:hidden}
+#sp h1{margin:0;font-size:1.9rem}#sp p{margin:0;color:#cfd9ff}
+#spc{width:min(74vw,300px);padding:8px}#spc svg{width:100%;display:block}
+#sp .go{background:var(--y);color:var(--ink);border:0;border-radius:999px;min-height:52px;padding:10px 40px;font-weight:800;font-size:1.1rem;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+#sp .no{background:none;border:0;color:#cfd9ff;text-decoration:underline;min-height:44px;padding:4px 12px}
+#sp .cr{font-size:.8rem;color:#aab8e8}
+@media (prefers-reduced-motion:no-preference){.sa{animation:fu .7s both}@keyframes fu{from{opacity:0;transform:translateY(14px)}}}
+button:focus-visible,input:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+@media (prefers-reduced-motion:no-preference){.btn,.opt,.chip{transition:transform .12s}.btn:active,.opt:active,.chip:active{transform:scale(.97)}}
+</style>
+</head>
+<body>
+<div id="sp" role="dialog" aria-label="Bienvenue">
+<div class="glass sa" style="padding:8px 18px"><img src="logo.png" alt="Logo Fédération Wallonie-Bruxelles" height="56"></div>
+<div class="glass" id="spc"></div>
+<h1 class="sa" style="animation-delay:.5s">Trigo en cercle</h1>
+<p class="sa" style="animation-delay:.8s">Sinus, cosinus et tangente sans calculatrice</p>
+<button class="go sa" id="go" style="animation-delay:1.6s">Commencer</button>
+<button class="no sa" id="no" style="animation-delay:1.8s">Sans musique</button>
+<div class="cr sa" style="animation-delay:2s">By Hugo Boucq ; Powered by IA (Claude)</div>
+</div>
+<audio id="bg" src="musique.mp3" loop preload="none"></audio>
+<header class="glass"><img src="logo.png" alt="Logo Fédération Wallonie-Bruxelles"><div><b>Trigo en cercle</b><small>Sinus, cosinus, tangente sans calculatrice</small></div><button id="mt" class="chip" aria-pressed="false" aria-label="Couper le son">🔊</button></header>
+<main>
+
+<section id="v-c" class="view on">
+<h1>Le cercle trigonométrique</h1>
+<p class="sub">Fais glisser le point. Le <b class="cb">cosinus</b> se lit sur l’axe horizontal, le <b class="rb">sinus</b> sur l’axe vertical, la <b class="yb">tangente</b> sur la droite jaune.</p>
+<div id="cv" class="glass cvw"></div>
+<div class="glass pad"><div>Angle : <b id="av"></b></div><input id="sl" type="range" min="0" max="360" value="50" aria-label="Angle en degrés"></div>
+<div class="chips" id="ch"></div>
+<div class="tri"><div class="glass"><small class="rb">sin</small><b id="vs"></b></div><div class="glass"><small class="cb">cos</small><b id="vc"></b></div><div class="glass"><small class="yb">tan</small><b id="vt"></b></div></div>
+<div class="glass pad" id="lect"></div>
+</section>
+
+<section id="v-m" class="view">
+<h1>La méthode technique</h1>
+<p class="sub">Trouver sin, cos et tan d’un angle avec le cercle gradué, sans calculatrice.</p>
+<div class="glass pad" style="display:grid;gap:14px">
+<div class="step"><i>1</i><p>Place l’angle sur le cercle gradué (0,2 · 0,4 · 0,6 · 0,8 · 1).</p></div>
+<div class="step"><i>2</i><p>Lis le <b class="cb">cos</b> sur l’axe horizontal et le <b class="rb">sin</b> sur l’axe vertical, au dixième près.</p></div>
+<div class="step"><i>3</i><p>Calcule <b>tan x = sin x ÷ cos x</b> avec tes deux lectures.</p></div>
+<div class="step"><i>4</i><p>Angle entre 90° et 180° ? Lis l’angle <b>180° − x</b>, puis corrige le signe.</p></div>
+</div>
+<div class="glass pad"><h2>Exemple : 50°</h2>
+<div class="ex">cos 50° ≈ 0,6</div><div class="ex">sin 50° ≈ 0,7</div><div class="ex">tan 50° ≈ 0,7 ÷ 0,6 ≈ 1,17</div>
+<button class="btn" id="try">Essayer sur le cercle</button></div>
+<div class="glass pad"><h2>Valeurs à connaître</h2>
+<table><tr><th>α</th><th>−180°</th><th>−90°</th><th>0°</th><th>90°</th><th>180°</th></tr>
+<tr><th>sin α</th><td>0</td><td>−1</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><th>cos α</th><td>−1</td><td>0</td><td>1</td><td>0</td><td>−1</td></tr>
+<tr><th>tan α</th><td>0</td><td>∥</td><td>0</td><td>∥</td><td>0</td></tr></table>
+<p class="sub">∥ : la tangente n’existe pas (division par 0).</p></div>
+<div class="glass pad"><h2>Les signes selon le quadrant</h2>
+<table><tr><th></th><th>sin</th><th>cos</th><th>tan</th></tr>
+<tr><th>I · 0°–90°</th><td>+</td><td>+</td><td>+</td></tr><tr><th>II · 90°–180°</th><td>+</td><td>−</td><td>−</td></tr>
+<tr><th>III · 180°–270°</th><td>−</td><td>−</td><td>+</td></tr><tr><th>IV · 270°–360°</th><td>−</td><td>+</td><td>−</td></tr></table></div>
+</section>
+
+<section id="v-p" class="view"><h1>Exercices</h1><div id="pz"></div></section>
+
+<section id="v-f" class="view">
+<h1>Triangle quelconque</h1>
+<p class="sub">Les formules pour un triangle non rectangle.</p>
+<div class="glass pad"><svg viewBox="0 0 300 130" style="width:100%;max-width:300px;display:block;margin:auto" aria-label="Triangle avec côtés a, b, c et angles α, β, γ"><path d="M150 12L28 112H272Z" fill="rgba(255,255,255,.5)" stroke="#1E3A8F" stroke-width="2.5" stroke-linejoin="round"/><g font-size="15" font-weight="700" fill="#14203F"><text x="143" y="38">α</text><text x="48" y="106">γ</text><text x="244" y="106">β</text><text x="140" y="127">a</text><text x="74" y="56">b</text><text x="215" y="56">c</text></g></svg></div>
+<div class="glass pad fm"><h2>Formule des sinus</h2>
+<span class="fr"><i>sin α</i><i>a</i></span> = <span class="fr"><i>sin β</i><i>b</i></span> = <span class="fr"><i>sin γ</i><i>c</i></span><br><small class="sub">Tu peux inverser les fractions.</small></div>
+<div class="glass pad fm"><h2>Formule des cosinus</h2><b>Pour trouver un côté</b><br>a² = b² + c² − 2·b·c·cos α<br>b² = a² + c² − 2·a·c·cos β<br>c² = a² + b² − 2·a·b·cos γ<br><b>Pour trouver un angle</b><br>cos α = <span class="fr"><i>b² + c² − a²</i><i>2·b·c</i></span><br>cos β = <span class="fr"><i>a² + c² − b²</i><i>2·a·c</i></span><br>cos γ = <span class="fr"><i>a² + b² − c²</i><i>2·a·b</i></span></div>
+<div class="glass pad fm"><h2>Aire</h2>Aire = <span class="fr"><i>b·c·sin α</i><i>2</i></span><br>Aire = <span class="fr"><i>a·c·sin β</i><i>2</i></span><br>Aire = <span class="fr"><i>a·b·sin γ</i><i>2</i></span></div>
+</section>
+
+<footer>Application pédagogique non affiliée à la Fédération Wallonie-Bruxelles.<br><b>By Hugo Boucq ; Powered by IA (Claude)</b></footer>
+</main>
+<nav class="glass" aria-label="Navigation">
+<button data-v="c" aria-current="page"><span>◔</span>Cercle</button><button data-v="m"><span>✦</span>Méthode</button><button data-v="p"><span>★</span>Exercices</button><button data-v="f"><span>△</span>Formules</button>
+</nav>
+<script>
+const $=s=>document.querySelector(s),R=x=>x*Math.PI/180;
+const mn=r=>r.replace("-","−");
+const f1=v=>mn((Math.round(v*10)/10).toFixed(1).replace(".",",").replace("-0,0","0,0"));
+const f2=v=>mn((Math.abs(v)<.005?0:v).toFixed(2).replace(".",","));
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const NM=["sin","cos","tan"],Q={I:["+","+","+"],II:["+","−","−"],III:["−","−","+"],IV:["−","+","−"]},RG={I:"0°–90°",II:"90°–180°",III:"180°–270°",IV:"270°–360°"};
+const fmt=k=>(k/5).toFixed(1).replace(".",",");
+
+function circ(a){
+ const t=R(a),c=Math.cos(t),s=Math.sin(t),U=120,x=U*c,y=-U*s,und=Math.abs(c)<.001;
+ let g="";
+ for(let k=-5;k<=5;k++)g+=`<path class="gr" d="M${k*24} -120V120M-120 ${k*24}H120"/>`;
+ let tk="";
+ for(let k=1;k<=5;k++)for(const m of[1,-1]){tk+=`<text class="tk" x="${m*k*24}" y="11">${m<0?"−":""}${fmt(k)}</text><text class="tk" x="-5" y="${-m*k*24+3}" style="text-anchor:end">${m<0?"−":""}${fmt(k)}</text>`}
+ let ty=und?0:Math.max(-146,Math.min(146,-U*s/c));
+ let h=`<svg viewBox="-150 -150 300 300" role="img" aria-label="Cercle trigonométrique, angle ${a} degrés">${g}<path class="ax" d="M-140 0H140M0 -140V140"/><circle class="cc" r="${U}"/>${tk}`;
+ if(!und)h+=`<path class="ld" d="M0 0L${U} ${ty}"/><path class="lt" d="M${U} 0V${ty}"/>`;
+ h+=`<path class="lc" d="M0 0H${x}"/><path class="ls" d="M${x} 0V${y}"/><path class="rad" d="M0 0L${x} ${y}"/>`;
+ if(a%360)h+=`<path class="arc" d="M20 0A20 20 0 ${a>180?1:0} 0 ${20*c} ${-20*s}"/>`;
+ if(Math.abs(x)>22)h+=`<text class="tl" x="${x/2}" y="${s>=0?14:-6}" fill="#1E3A8F" text-anchor="middle">cos</text>`;
+ if(Math.abs(y)>22)h+=`<text class="tl" x="${x+(c>=0?8:-8)}" y="${y/2+4}" fill="#E5282D" text-anchor="${c>=0?"start":"end"}">sin</text>`;
+ return h+`<circle class="pt" cx="${x}" cy="${y}" r="7"/></svg>`;
+}
+
+function upd(a){
+ a=+a;const t=R(a),c=Math.cos(t),s=Math.sin(t),und=Math.abs(c)<.001;
+ $("#cv").innerHTML=circ(a);$("#av").textContent=a+"°";$("#sl").value=a;
+ $("#vs").textContent=f2(s);$("#vc").textContent=f2(c);$("#vt").textContent=und?"∥":f2(s/c);
+ const sr=Math.round(s*10)/10,cr=Math.round(c*10)/10,qn=a<90?"I":a<180?"II":a<270?"III":"IV";
+ let h=`<b>Lecture au dixième</b><br>cos ≈ ${f1(cr)} · sin ≈ ${f1(sr)}<br>tan ≈ ${f1(sr)} ÷ ${f1(cr)} ${und||cr===0?"→ impossible (cos ≈ 0)":"≈ "+f2(sr/cr)}`;
+ h+=`<br><small class="sub">${a%90===0?"L’angle est sur un axe.":"Quadrant "+qn+" : sin "+Q[qn][0]+" · cos "+Q[qn][1]+" · tan "+Q[qn][2]}</small>`;
+ if(a>90&&a<180)h+=`<br><small class="sub">Astuce : 180° − ${a}° = ${180-a}°</small>`;
+ $("#lect").innerHTML=h;
+}
+let drag=0;const cv=$("#cv");
+function mv(e){const r=cv.querySelector("svg").getBoundingClientRect(),dx=e.clientX-r.left-r.width/2,dy=e.clientY-r.top-r.height/2;upd((Math.round(Math.atan2(-dy,dx)*180/Math.PI)+360)%360)}
+cv.addEventListener("pointerdown",e=>{drag=1;cv.setPointerCapture(e.pointerId);mv(e)});
+cv.addEventListener("pointermove",e=>drag&&mv(e));
+["pointerup","pointercancel"].forEach(n=>cv.addEventListener(n,()=>drag=0));
+$("#sl").addEventListener("input",e=>upd(e.target.value));
+$("#ch").innerHTML=[0,30,45,60,90,120,135,150,180,270].map(a=>`<button class="chip" data-a="${a}">${a}°</button>`).join("");
+$("#ch").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b)upd(b.dataset.a)});
+
+function go(v){
+ document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));
+ document.querySelectorAll("nav button").forEach(b=>b.dataset.v===v?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current"));
+ if(v==="p"&&!S.cur&&!S.e)nextQ();scrollTo(0,0);
+}
+document.querySelector("nav").addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(b)go(b.dataset.v)});
+$("#try").onclick=()=>{go("c");upd(50)};
+
+/* Exercices */
+const F=[],add=(q,a,o)=>F.push({q,a,o}),V=["0","1","−1","non défini"];
+[["sin 0°","0"],["sin 90°","1"],["sin 180°","0"],["sin (−90°)","−1"],["sin (−180°)","0"],["cos 0°","1"],["cos 90°","0"],["cos 180°","−1"],["cos (−90°)","0"],["cos (−180°)","−1"],["tan 0°","0"],["tan 90°","non défini"],["tan 180°","0"],["tan (−90°)","non défini"]].forEach(([q,a])=>add(q+" = ?",a,V));
+for(const k in Q)Q[k].forEach((s,i)=>add(`Signe de ${NM[i]} entre ${RG[k]}`,s,["+","−"]));
+add("tan x = ?","sin x ÷ cos x",["sin x ÷ cos x","cos x ÷ sin x","sin x × cos x","1 ÷ cos x"]);
+add("Entre 90° et 180°, je lis l’angle…","180° − x",["180° − x","x − 180°","90° − x","360° − x"]);
+[100,120,130,150,170].forEach(a=>add(`Angle à lire pour ${a}°`,(180-a)+"°",[180-a,a-90,270-a,360-a].map(v=>v+"°")));
+const S=Object.assign({mode:"cards",queue:[],cur:null,e:null,pts:0,streak:0,best:0,res:null,flip:0},(()=>{try{return JSON.parse(localStorage.getItem("trigo"))||{}}catch(e){return{}}})());
+S.queue=[];S.cur=null;S.e=null;S.res=null;S.flip=0;S.streak=0;
+function save(){try{localStorage.setItem("trigo",JSON.stringify({pts:S.pts,best:S.best,mode:S.mode}))}catch(e){}}
+function grade(ok){
+ if(ok){S.pts+=10;S.streak++;S.best=Math.max(S.best,S.streak)}else{S.streak=0;if(S.mode!=="est")S.queue.splice(Math.min(4,S.queue.length),0,S.ci)}
+ save();
+}
+function estQ(){
+ const fn=NM[Math.random()*3|0];let a;
+ do{a=Math.floor(Math.random()*35)*10+10}while(a%90===0||(fn==="tan"&&Math.abs(Math.cos(R(a)))<.25));
+ const v=Math[fn](R(a));S.e={fn,a,v,tol:fn==="tan"?Math.max(.2,Math.abs(v)*.1):.1};
+}
+function nextQ(){
+ S.res=null;S.flip=0;
+ if(S.mode==="est")estQ();
+ else{if(!S.queue.length)S.queue=shuf(F.map((_,i)=>i));S.ci=S.queue.shift();S.cur=F[S.ci];S.opts=shuf(S.cur.o.slice())}
+ draw();
+}
+function draw(){
+ let h=`<div class="glass sc"><span>⭐ ${S.pts}</span><span>🔥 ${S.streak}</span><span>Record ${S.best}</span></div><div class="seg" style="margin:12px 0">${[["cards","Cartes"],["qcm","QCM"],["est","Estime"]].map(([k,n])=>`<button data-x="m:${k}" class="${S.mode===k?"on":""}">${n}</button>`).join("")}</div>`;
+ if(S.mode==="est"){
+  const e=S.e;
+  h+=`<div class="glass cvw">${circ(e.a)}</div><div class="glass pad" style="margin-top:12px"><p class="q">Estime ${e.fn} ${e.a}° au dixième</p>`;
+  if(!S.res)h+=`<div class="row"><input id="ans" type="text" inputmode="decimal" autocomplete="off" placeholder="ex : 0,7" aria-label="Ta réponse"><button class="btn" data-x="chk" style="flex:1">Vérifier</button></div>`;
+  else h+=`<p class="fb ${S.res}">${S.res==="ok"?"Bien lu !":"Presque. Relis le cercle."} ${e.fn} ${e.a}° ≈ ${f2(e.v)} (ta réponse : ${f2(e.u)})</p>${e.a>90&&e.a<180?`<p class="sub">Astuce : lis l’angle ${180-e.a}°, puis corrige le signe.</p>`:""}<button class="btn" data-x="next">Suivant</button>`;
+  h+="</div>";
+ }else if(S.mode==="cards"){
+  const c=S.cur;
+  h+=`<div class="glass card" ${S.flip?"":'data-x="flip"'}><small>${S.flip?c.q:"Touche la carte pour la retourner"}</small><p class="q">${S.flip?c.a:c.q}</p></div>`;
+  if(S.flip)h+=`<div class="row" style="margin-top:12px"><button class="btn ko" data-x="ko">À revoir</button><button class="btn ok" data-x="ok">Je savais</button></div>`;
+ }else{
+  const c=S.cur;
+  h+=`<div class="glass pad"><p class="q">${c.q}</p><div class="opts">${S.opts.map((o,i)=>`<button class="opt ${S.res?(o===c.a?"ok":String(i)===S.pick?"ko":""):""}" data-x="p${i}">${o}</button>`).join("")}</div>${S.res?'<button class="btn" data-x="next">Suivant</button>':""}</div>`;
+ }
+ $("#pz").innerHTML=h;
+}
+$("#pz").addEventListener("click",e=>{
+ const b=e.target.closest("[data-x]");if(!b)return;const x=b.dataset.x;
+ if(x.startsWith("m:")){S.mode=x.slice(2);save();nextQ()}
+ else if(x==="flip"){S.flip=1;draw()}
+ else if(x==="ok"||x==="ko"){grade(x==="ok");nextQ()}
+ else if(x==="next")nextQ();
+ else if(x==="chk"){
+  const v=parseFloat($("#ans").value.replace(",",".").replace("−","-"));if(isNaN(v))return;
+  const ok=Math.abs(v-S.e.v)<=S.e.tol;S.e.u=v;S.res=ok?"ok":"ko";grade(ok);draw();
+ }else if(x[0]==="p"&&!S.res){S.pick=x.slice(1);const ok=S.opts[+S.pick]===S.cur.a;S.res=ok?"ok":"ko";grade(ok);draw()}
+});
+$("#pz").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="ans")$("[data-x=chk]").click()});
+upd(50);
+/* Musique + lancement */
+const au=$("#bg");let muted=false,started=false;
+try{muted=localStorage.getItem("trigo-mute")==="1"}catch(e){}
+function setM(m){muted=m;const b=$("#mt");b.textContent=m?"🔇":"🔊";b.setAttribute("aria-pressed",m);b.setAttribute("aria-label",m?"Activer le son":"Couper le son");try{localStorage.setItem("trigo-mute",m?"1":"0")}catch(e){}if(m)au.pause();else if(started)au.play().catch(()=>{})}
+function start(music){const sp=$("#sp");sp.classList.add("out");setTimeout(()=>sp.remove(),700);started=true;au.volume=.4;if(!music)setM(true);else if(!muted)au.play().catch(()=>{})}
+$("#go").onclick=()=>start(true);$("#no").onclick=()=>start(false);
+$("#mt").onclick=()=>setM(!muted);
+document.addEventListener("visibilitychange",()=>{if(!started||muted)return;document.hidden?au.pause():au.play().catch(()=>{})});
+setM(muted);
+(function(){const box=$("#spc");if(matchMedia("(prefers-reduced-motion:reduce)").matches){box.innerHTML=circ(50);return}
+let t0=null;(function step(ts){t0=t0||ts;const p=Math.min((ts-t0)/2800,1);box.innerHTML=circ(Math.round((1-Math.pow(1-p,3))*410)%360);if(p<1)requestAnimationFrame(step)})(0);})();
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
